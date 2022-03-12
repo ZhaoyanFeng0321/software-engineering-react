@@ -17,3 +17,4 @@ export const Tuits = ({tuits = [], deleteTuit}) => {
         </div>
     );
 }
+export default Tuits;
