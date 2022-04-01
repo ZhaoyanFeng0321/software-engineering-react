@@ -20,6 +20,7 @@ describe('test links', () => {
     // jest.spyOn(BrowserRouter, 'useLocation')
     //     .mockReturnValue({ pathname: '/tuiter' })
     beforeEach(() => {
+        // eslint-disable-next-line testing-library/no-render-in-setup
         const {container} = render(
             <BrowserRouter>
                 <Navigation/>
@@ -30,10 +31,12 @@ describe('test links', () => {
         const testName = `Clicking on ${link.label} highlights the link`;
         test(testName, () => {
             // get all the links
+            // eslint-disable-next-line testing-library/no-node-access
             const a = document.querySelectorAll("a");
             // click on the nth link
             fireEvent.click(a[nth]);
             // get all the line items
+            // eslint-disable-next-line testing-library/no-node-access
             const lis = document.querySelectorAll("li");
             // the line item should have class fw-bold to highlight
             expect(lis[nth].className

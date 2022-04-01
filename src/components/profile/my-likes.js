@@ -7,10 +7,10 @@ const MyLikes = () => {
     const findTuitsILike = async () => {
         const findLikedTuits = await service.findAllTuitsLikedByUser("me");
         setLikedTuis(findLikedTuits);
-        }
+    }
     useEffect(findTuitsILike, []);
-    
-    return(
+
+    return (
         <div>
             <Tuits tuits={likedTuits} refreshTuits={findTuitsILike}/>
         </div>
