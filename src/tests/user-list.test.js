@@ -4,8 +4,6 @@ import {HashRouter} from "react-router-dom";
 import {findAllUsers} from "../services/users-service";
 import axios from "axios";
 
-//jest.mock('axios');
-
 const MOCKED_USERS = [
   {username: 'ellen_ripley', password: 'lv426', email: 'repley@weyland.com', _id: "123"},
   {username: 'sarah_conor', password: 'illbeback', email: 'sarah@bigjeff.com', _id: "234"},
@@ -30,10 +28,11 @@ test('user list renders async', async () => {
   expect(linkElement).toBeInTheDocument();
 })
 
+
 test('user list renders mocked', async () => {
   const mock = jest.spyOn(axios, 'get');
   mock.mockImplementation(() =>
-    Promise.resolve({ data: {users: MOCKED_USERS} }));
+      Promise.resolve({data: {users: MOCKED_USERS}}));
   const response = await findAllUsers();
   const users = response.users;
 

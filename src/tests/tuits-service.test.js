@@ -1,161 +1,177 @@
-import {
-    findAllTuits, findTuitById,
-    createTuit, deleteTuit, deleteTuitsByTuit
-} from "../services/tuits-service";
-
-import {
-    createUser,
-    deleteUsersByUsername
-} from "../services/users-service";
+import {createUser, deleteUsersByUsername} from "../services/users-service";
+import {createTuit, deleteTuit, deleteTuitsByUser, findAllTuits, findTuitById} from "../services/tuits-service";
 
 describe('can create tuit with REST API', () => {
-    const mockUser = {
-        username: 'userrr',
-        password: '123456',
-        email: 'userrr@email.com'
+    // sample user to insert
+    const ripley = {
+        username: 'ellenripley',
+        password: 'lv426',
+        email: 'ellenripley@aliens.com'
     };
 
-    const post1 = {
-        tuit: 'simply dummy text.'
-    };
-    // setup the tests before verification
-    beforeAll(() => {
-        // insert the sample user we then try to remove
-        deleteUsersByUsername(mockUser.username);
-        return deleteTuitsByTuit(post1.tuit);
-    });
+    // sample tuit to insert
+    const testTuit = {
+        tuit: "Hello! This is a test",
+        postedBy: ""
+    }
+
+    // setup test before running test
+    beforeAll(async () => {
+        // remove any/all users to make sure we create it in the test
+        await deleteUsersByUsername(ripley.username);
+        const user = await createUser(ripley);
+        testTuit.postedBy = user._id;
+        return deleteTuitsByUser(testTuit.postedBy);
+    })
 
     // clean up after test runs
     afterAll(() => {
         // remove any data we created
-        deleteTuitsByTuit(post1.tuit);
-        return deleteUsersByUsername(mockUser.username);
+        deleteTuitsByUser(testTuit.postedBy);
+        return deleteUsersByUsername(ripley.username);
     })
 
-    test('can create tuit with REST API', async () => {
+    test('can insert new tuits with REST API', async () => {
         // insert new user in the database
-        const user = await createUser(mockUser);
-        const newTuit = await createTuit(user._id, post1);
-        // verify inserted tuit's properties match parameter tuit
-        expect(newTuit.tuit).toEqual(post1.tuit);
+        const newTuit = await createTuit(testTuit.postedBy, testTuit);
+
+        // verify inserted tuit's properties match parameter user
+        expect(newTuit.tuit).toEqual(testTuit.tuit);
     });
 });
 
-describe('can delete tuit with REST API', () => {
-    const mockUser = {
-        username: 'userrr',
-        password: '123456',
-        email: 'userrr@email.com'
-    };
-    const post1 = {
-        tuit: 'simply dummy text.'
+describe('can delete tuit wtih REST API', () => {
+    // sample user to insert
+    const ripley = {
+        username: 'ellenripley',
+        password: 'lv426',
+        email: 'ellenripley@aliens.com'
     };
 
-    // setup the tests before verification
+    // sample tuit to insert
+    const testTuit = {
+        tuit: "Hello! This is a test",
+        postedBy: ""
+    }
+
+    // setup test before running test
     beforeAll(async () => {
-        // insert the sample tuit we then try to remove
-        return deleteTuitsByTuit(post1.tuit);
-    });
+        // remove any/all users to make sure we create it in the test
+        await deleteUsersByUsername(ripley.username);
+        const user = await createUser(ripley);
+        testTuit.postedBy = user._id;
+        return deleteTuitsByUser(testTuit.postedBy);
+    })
 
     // clean up after test runs
     afterAll(() => {
         // remove any data we created
-        deleteTuitsByTuit(post1.tuit);
-        return deleteUsersByUsername(mockUser.username);
+        deleteTuitsByUser(testTuit.postedBy);
+        return deleteUsersByUsername(ripley.username);
+    })
+
+    test('can delete tuits with REST API', async () => {
+        // insert new user in the database
+        const newTuit = await createTuit(testTuit.postedBy, testTuit);
+        const deleteStatus = await deleteTuit(newTuit._id);
+
+
+        // verify delete tuit's status
+        expect(deleteStatus.deletedCount).toBeGreaterThanOrEqual(1);
     });
 
-    test('can delete tuit with REST API', async () => {
-        // delete a user by their tuit id.
-        const user = await createUser(mockUser);
-        const newTuit = await createTuit(user._id, post1);
-        const status = await deleteTuit(newTuit._id);
-        // verify we deleted at least one tuit
-        expect(status.deletedCount).toBeGreaterThanOrEqual(1);
-    });
+
 });
 
 describe('can retrieve a tuit by their primary key with REST API', () => {
-    const mockUser = {
-        username: 'userrr',
-        password: '123456',
-        email: 'userrr@email.com'
+    // sample user to insert
+    const ripley = {
+        username: 'ellenripley',
+        password: 'lv426',
+        email: 'ellenripley@aliens.com'
     };
 
-    // sample tuit we'll insert to then retrieve
-    const post1 = {
-        tuit: 'simply dummy text.'
-    };
+    // sample tuit to insert
+    const testTuit = {
+        tuit: "Hello! This is a test",
+        postedBy: ""
+    }
 
-    const testId = {
-        tid: ""
-    };
+    // setup test before running test
+    beforeAll(async () => {
+        // remove any/all users to make sure we create it in the test
+        await deleteUsersByUsername(ripley.username);
+        const user = await createUser(ripley);
+        testTuit.postedBy = user._id;
+        return deleteTuitsByUser(testTuit.postedBy);
+    })
 
-    // setup data before test
-    beforeAll(async() => {
-        const user = await createUser(mockUser);
-        const newTuit = await createTuit(user._id, post1);
-        testId.tid = newTuit._id;
-    });
-
-    // clean up after ourselves
+    // clean up after test runs
     afterAll(() => {
-             // delete the tuits we inserted
-        deleteTuitsByTuit(post1.tuit);
-        return deleteUsersByUsername(mockUser.username);
+        // remove any data we created
+        deleteTuitsByUser(testTuit.postedBy);
+        return deleteUsersByUsername(ripley.username);
+    })
+
+    test('can find tuits with REST API', async () => {
+        // insert new user in the database
+        const newTuit = await createTuit(testTuit.postedBy, testTuit);
+        const findTuit = await findTuitById(newTuit._id);
+
+        // verify delete tuit's status
+        expect(findTuit.tuit).toEqual(newTuit.tuit);
     });
 
-    test('can retrieve a tuit by their primary key with REST API', async () => {
-        // retrieve all the tuits
-        const target = await findTuitById(testId.tid);
-        expect(target.tuit).toEqual(post1.tuit);
-    });
 });
 
 describe('can retrieve all tuits with REST API', () => {
-    const mockUser = {
-        username: 'userrr',
-        password: '123456',
-        email: 'userrr@email.com'
-    };
-    // sample tuit we'll insert to then retrieve
+    // sample users we'll insert to then retrieve
     const tuits = [
-        "mockpostcontent1", "mockpostcontent2", "mockpostcontent3"
+        "test1", "test2", "test3"
     ];
 
+    // sample user to insert
+    const ripley = {
+        username: 'ellenripley',
+        password: 'lv426',
+        email: 'ellenripley@aliens.com'
+    };
+
+    let user = '';
+
     // setup data before test
-
-    beforeAll(async() => {
-        const user = await createUser(mockUser);
-          tuits.map(t =>
-            createTuit(user._id, {
-                tuit: t
-               })
-          )}
+    beforeAll(async () => {
+        await deleteUsersByUsername(ripley.username);
+        user = await createUser(ripley);
+        // insert several known users
+        tuits.map(tuit => createTuit(user._id,{
+            tuit: tuit,
+            postedBy:user._id
+        })
+        )}
     );
-
-    // clean up after ourselves
+    // clean up after test runs
     afterAll(() => {
-        // delete the tuits we inserted
-         tuits.map(tuit => deleteTuitsByTuit(tuit));
-         return deleteUsersByUsername(mockUser.username);
-     }
-    );
+        // remove any data we created
+        deleteTuitsByUser(user._id);
+        return deleteUsersByUsername(ripley.username);
+    });
 
-    test('can retrieve all tuits with REST API', async () => {
-        // retrieve all the tuits
+    test('can find all tuits with REST API', async () => {
+        // insert new user in the database
         const allTuits = await findAllTuits();
 
-        // there should be a minimum number of tuits
-        expect(allTuits.length).toBeGreaterThanOrEqual(tuits.length);
+        // there should be a minimum number of users
+        expect(tuits.length).toBeGreaterThanOrEqual(allTuits.length);
 
-        // let's check each tuit we created
+        // let's check each user we inserted
         const tuitsWeInserted = allTuits.filter(
-            t => tuits.indexOf(t.tuit) >= 0);
+            tuit => tuits.indexOf(tuit.tuit) >= 0);
 
-        // compare the actual tuits in database with the ones we sent
-        tuitsWeInserted.forEach(t => {
-            const tt = tuits.find(tt => tt === t.tuit);
-            expect(t.tuit).toEqual(tt);
+        // compare the actual users in database with the ones we sent
+        tuitsWeInserted.forEach(tuit => {
+            const tuitContent = tuits.find(tuitContent => tuitContent === tuit.tuit);
+            expect(tuitContent).toEqual(tuitContent);
         });
     });
 });
