@@ -21,18 +21,18 @@ const Tuits = ({tuits = [], refreshTuits}) => {
 
     return (
         <div>
-          <ul className="ttr-tuits list-group">
-            {
-              tuits && tuits.map(tuit =>
-                  <Tuit key={tuit._id}
-                        deleteTuit={deleteTuit}
-                        likeTuit={likeTuit}
-                        dislikeTuit={dislikeTuit}
-                        tuit={tuit}/>)
-            }
-          </ul>
+            <ul className="ttr-tuits list-group">
+                {
+                    tuits && tuits.map(tuit =>
+                                           <Tuit key={tuit._id}
+                                                 deleteTuit={deleteTuit}
+                                                 likeTuit={likeTuit}
+                                                 dislikeTuit={dislikeTuit}
+                                                 tuit={tuit}/>)
+                }
+            </ul>
         </div>
-      );
+    );
 }
 
 export default Tuits;

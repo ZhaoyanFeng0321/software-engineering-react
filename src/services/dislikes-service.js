@@ -1,13 +1,12 @@
 import axios from "axios";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL
-//const BASE_URL = "http://localhost:4000"
+const BASE_URL = "http://localhost:4000"
 const USERS_API = `${BASE_URL}/api/users`;
 const TUITS_API = `${BASE_URL}/api/tuits`;
 
 const api = axios.create({
-    withCredentials: true
-});
+                             withCredentials: true
+                         });
 
 export const findAllTuitsDislikedByUser = (userId) =>
     api.get(`${USERS_API}/${userId}/dislikes`)
