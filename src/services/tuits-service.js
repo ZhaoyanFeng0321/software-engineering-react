@@ -1,13 +1,15 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:4000"
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const TUITS_API = `${BASE_URL}/api/tuits`;
 const USERS_API = `${BASE_URL}/api/users`;
 
 const api = axios.create({
-    withCredentials: true
-});
+                             withCredentials: true
+                         });
+
+
 
 export const findAllTuits = () =>
     api.get(TUITS_API)
@@ -32,3 +34,4 @@ export const updateTuit = (tid, tuit) =>
 export const deleteTuit = (tid) =>
     api.delete(`${TUITS_API}/${tid}`)
         .then(response => response.data);
+

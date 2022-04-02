@@ -1,17 +1,14 @@
+/**
+ * @file Profile component for display profile page of a user
+ * Profile page contains links to my-tuits, my-likes, my-dislikes
+ */
 import React, {useEffect, useState} from "react";
 import MyTuits from "./my-tuits";
-import {Link, Route, Routes, useNavigate, useLocation} from "react-router-dom";
-import * as service from "../../services/security-service"
-import TuitsAndReplies from "./tuits-and-replies";
-import Media from "./media";
+import {HashRouter, Link, Route, Routes, useNavigate, useLocation} from "react-router-dom";
+import * as service from "../../services/auth-service"
 import MyLikes from "./my-likes";
 import MyDislikes from "./my-dislikes";
 
-/**
- * Component for showing profile page of the user.
- * @return {JSX.Element} <Profile />
- * @constructor
- */
 const Profile = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -28,7 +25,7 @@ const Profile = () => {
         service.logout()
             .then(() => navigate('/login'));
     }
-    return (
+    return(
         <div className="ttr-profile">
             <div className="border border-bottom-0">
                 <h4 className="p-2 mb-0 pb-0 fw-bolder">
@@ -76,27 +73,17 @@ const Profile = () => {
                     <ul className="mt-4 nav nav-pills nav-fill">
                         <li className="nav-item">
                             <Link to="/profile/mytuits"
-                                  className={`nav-link ${location.pathname.indexOf('mytuits') >= 0 ? 'active' : ''}`}>
+                                  className={`nav-link ${location.pathname.indexOf('mytuits') >= 0 ? 'active':''}`}>
                                 Tuits</Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/profile/tuits-and-replies"
-                                  className={`nav-link ${location.pathname.indexOf('tuits-and-replies') >= 0 ? 'active' : ''}`}>
-                                Tuits & replies</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/profile/media"
-                                  className={`nav-link ${location.pathname.indexOf('media') >= 0 ? 'active' : ''}`}>
-                                Media</Link>
-                        </li>
-                        <li className="nav-item">
                             <Link to="/profile/mylikes"
-                                  className={`nav-link ${location.pathname.indexOf('mylikes') >= 0 ? 'active' : ''}`}>
+                                  className={`nav-link ${location.pathname.indexOf('mylikes') >= 0 ? 'active':''}`}>
                                 Likes</Link>
                         </li>
                         <li className="nav-item">
                             <Link to="/profile/mydislikes"
-                                  className={`nav-link ${location.pathname.indexOf('mydislikes') >= 0 ? 'active' : ''}`}>
+                                  className={`nav-link ${location.pathname.indexOf('dislikes') >= 0 ? 'active':''}`}>
                                 Dislikes</Link>
                         </li>
                     </ul>
@@ -104,8 +91,6 @@ const Profile = () => {
             </div>
             <Routes>
                 <Route path="/mytuits" element={<MyTuits/>}/>
-                <Route path="/tuits-and-replies" element={<TuitsAndReplies/>}/>
-                <Route path="/media" element={<Media/>}/>
                 <Route path="/mylikes" element={<MyLikes/>}/>
                 <Route path="/mydislikes" element={<MyDislikes/>}/>
             </Routes>

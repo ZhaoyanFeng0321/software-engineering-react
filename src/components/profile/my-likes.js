@@ -1,16 +1,15 @@
 import Tuits from "../tuits";
-import * as service from "../../services/likes-service";
+import * as service from "../../services/like-service";
 import {useEffect, useState} from "react";
 
 const MyLikes = () => {
     const [likedTuits, setLikedTuis] = useState([]);
-    const findTuitsILike = async () => {
-        const findLikedTuits = await service.findAllTuitsLikedByUser("me");
-        setLikedTuis(findLikedTuits);
-    }
+    const findTuitsILike = () =>
+        service.findAllTuitsLikedByUser("my")
+            .then((tuits) => setLikedTuis(tuits));
     useEffect(findTuitsILike, []);
 
-    return (
+    return(
         <div>
             <Tuits tuits={likedTuits} refreshTuits={findTuitsILike}/>
         </div>
