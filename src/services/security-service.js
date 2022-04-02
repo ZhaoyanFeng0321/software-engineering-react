@@ -1,6 +1,5 @@
 import axios from "axios";
-const BASE_URL = "https://cs5500-assignment4-branch.herokuapp.com";
-// const BASE_URL = "http://localhost:4000"
+const BASE_URL = "http://localhost:4000"
 
 const SECURITY_API = `${BASE_URL}/api/auth`;
 
