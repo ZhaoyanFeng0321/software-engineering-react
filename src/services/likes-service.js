@@ -1,12 +1,13 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:4000"
+const BASE_URL = "https://cs5500-assignment4-branch.herokuapp.com";
+// const BASE_URL = "http://localhost:4000"
 const USERS_API = `${BASE_URL}/api/users`;
 const TUITS_API = `${BASE_URL}/api/tuits`;
 
 const api = axios.create({
-                             withCredentials: true
-                         });
+  withCredentials: true
+});
 
 export const findAllTuitsLikedByUser = (userId) =>
     api.get(`${USERS_API}/${userId}/likes`)

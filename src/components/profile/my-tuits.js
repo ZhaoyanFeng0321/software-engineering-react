@@ -8,7 +8,6 @@ const MyTuits = () => {
     const findMyTuits = async () => {
         const user = await profile();
         if (user) {
-            console.log("find tuits for me")
             service.findTuitByUser("me")
                 .then(tuits => setTuits(tuits));
         }

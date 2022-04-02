@@ -7,6 +7,11 @@ import Media from "./media";
 import MyLikes from "./my-likes";
 import MyDislikes from "./my-dislikes";
 
+/**
+ * Component for showing profile page of the user.
+ * @return {JSX.Element} <Profile />
+ * @constructor
+ */
 const Profile = () => {
     const navigate = useNavigate();
     const location = useLocation();
